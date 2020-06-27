@@ -689,8 +689,217 @@
   // funtionCallMeLater();
   // Косвенный вызов метода/функции через call, apply, bind
 
+	console.log("OB = ", {} == {}, {} === {});
+	if ({} == {}) {
+	  console.log("OB == true")
+	} else {
+    console.log("OB == false")
+	}
+
+	function sst(firstName, secondNAme) {
 
 
+	  console.log("sst.name = ", sst.name, sst.extra);
+
+	  var result = {
+      first: firstName,
+			second: secondNAme,
+      fullName: firstName + " " + secondNAme,
+
+			printName: function () {
+				return this.first;
+      },
+
+      printUser() {
+        return this.first;
+			}
+		}
+
+		return result;
+
+	  console.log("Hello")
+
+  }
+  sst.extra = 555;
+
+
+	/// Object.key.values.entries
+	// функции обертки над приметивами
+
+	var str2 = "Какой-то текст на русском языке";
+
+	console.log("Длинна строки", str2.length );
+	console.log("трансформированная строка", str2.toLocaleUpperCase() );
+
+	// String();
+  // String.toLocaleUpperCase();
+  // String.length;
+	//
+	//
+  // String(str2).length;
+  // String(str2).toLocaleUpperCase();
+
+  // Object() --> { }
+
+	var rrKeys = Object.keys(ob1);
+	var rrValues = Object.values(ob1);
+	var rrEntries = Object.entries(ob1);
+	console.log("Ключи объекта ob1", rrKeys, rrValues);
+	console.log("Entries объекта ob1", rrEntries);
+
+  console.log(String(ob1).toString());
+  var str3 = "   sdfsdfsdf       ";
+  console.log(str3.length, str3.trim().length );
+
+  var str4 = "Какой-то.текст,с,очень.интересными,буквами";
+
+  var resStr4 = str4.split(",");
+  console.log("Количество запятых = ", resStr4.length - 1);
+  console.log("Количество точек = ", str4.split(".").length - 1);
+
+  var strS = 'Марина съела утром __RPLC__ вкусных булочек.';
+
+  console.log(strS.replace("__RPLC__", "15"), str4.charAt(10));
+
+
+  //// Встроенные методы массивов
+
+	var SWEET_CONSTANT = "Сладкий";
+
+	var ms10 = [
+		{
+		  name: "Банан",
+			taste: SWEET_CONSTANT,
+			size: "M",
+		},
+		{
+		  name: "Апельски",
+			taste: "Кисло-Сладкий",
+			size: "S",
+		},
+		{
+		  name: "Лемон",
+			taste: "Кислый",
+			size: "S",
+		},
+		{
+		  name: "Тыква",
+			taste: "терпкая",
+			size: "XL",
+		},
+		{
+		  name: "Виноград",
+			taste: SWEET_CONSTANT,
+			size: "xs",
+		},
+	];
+
+	function printVegetables(item) {
+
+		console.log(`Продукт: ${ item.name} имеет вкус '${ item.taste }', имеет размер '${ item.size }'`);
+	}
+
+	function printVegetablesUnkown(item) {
+		if (typeof item === "object") {
+		  var resStr = [];
+		  Object
+				.values(item)
+				.forEach( function(localItem, index, originalMS) {
+          resStr.push(localItem);
+				});
+      console.log("Продукт: ", resStr.join(" "));
+		} else {
+      console.log("Продукт (примитивный): ", item);
+		}
+
+	}
+
+
+
+  ms10.forEach(printVegetables);
+  console.log("-- -------");
+  ms10.forEach(printVegetablesUnkown);
+
+
+  function printVegetablesMap(item) {
+    return `Продукт: ${ item.name} имеет вкус '${ item.taste }', имеет размер '${ item.size }'`;
+  }
+
+  console.log("-- ------- MAP ");
+  var mapResult = ms10.map(printVegetablesMap)
+  console.log(mapResult);
+
+  var newMS = ["Василек", "Ромашка", "Пион"];
+  console.log("Резульат объединения двух массивов", ms10.concat(newMS))
+
+	function filterSweetVegs(item) {
+    return item.taste && (item.taste.toLocaleLowerCase() === SWEET_CONSTANT.toLocaleLowerCase());
+
+    // false || false || true || 5+6
+
+	}
+
+	var onlySweetVeg = ms10.filter(filterSweetVegs).map(printVegetablesMap);
+  console.log("Только сладкие объекты", onlySweetVeg);
+
+  ms11 = [55, 33, 44, 99];
+  console.log(ms11.includes(99)); // узнает есть такой элемент
+  console.log(ms11.indexOf(990)); // выдает индекс элемента, если есть
+
+
+	ms12 = [44, 2, 6, 89, 13, 67, 44, 23];
+
+	function sortMyArray(a, b) {
+	  if (a < b) return -1;
+	  else if (a > b) return 1;
+	  else return 0;
+	}
+
+	function sortVerggy(a, b) {
+
+    var a1 = a.name.toLocaleLowerCase()
+    var b1 = b.name.toLocaleLowerCase()
+
+	  if (a1 < b1) return -1;
+    else if (a1 > b1) return 1;
+    else return 0;
+	}
+
+	// console.log(ms12.slice().sort())
+	// console.log(ms12.sort(sortMyArray))
+
+	console.log(ms10.sort(sortVerggy))
+
+  // var delResult = ms12.splice(5, 2); // удалить 2 элемента
+	// console.log("Удалили ", delResult, ", результат: ", ms12)
+
+  var addResult = ms12.splice(1, 2, "Золушку", "Тыква"); // хочу добавить 3 элемента
+  console.log("Добавили ", addResult, ", результат: ", ms12)
+
+  ms15 = [44, 2, 6, 89, 13, 67, 44, 23];
+
+  ms15.reduce(function(acc, item, index) {
+
+    console.log("Шаг ", index, "Результат сложения: ", acc );
+		return acc + item;
+	});
+
+  // Symbol
+
+	var mySymbol = Symbol();
+  console.log("Объект символ ", mySymbol );
+
+	var mySymbol1 = Symbol("Hello");
+	var mySymbol2 = Symbol("Hello");
+  console.log("Объект символ ", mySymbol1 === mySymbol2);
+
+  var user500 = {
+    name: "sdfsdf",
+		age: 40,
+		[mySymbol1]: "Поле на основе символа"
+	}
+
+	console.log("Поле >> ", user500[mySymbol2])
 </script>
 </body>
 </html>
