@@ -586,7 +586,7 @@
 	console.log("ob1.printUserName = "); // вывод в консоль тоже можно записать как часть объекта window -> window.console.log("ob1.printUserName = ")
 	ob1.printUserName();
 
-	setTimeout(window.ob1.printUserName, 500);
+	// setTimeout(window.ob1.printUserName, 500);
 
 	// ВАЖНО!
 	// ВСЕ переменные и функции, которые объявлены на первом уровне вложенности в объекте window
@@ -899,7 +899,170 @@
 		[mySymbol1]: "Поле на основе символа"
 	}
 
-	console.log("Поле >> ", user500[mySymbol2])
+	console.log("Поле >> ", user500[mySymbol2]);
+
+
+  // гетеры и сетеры = getter & setter
+
+	var user12 = {
+	  fName: "",
+	  lName: "",
+		age: 30,
+
+		printUserName() {
+	    return this.fName + " " + this.lName;
+		},
+
+		checkUserEmail() {
+			;
+		},
+
+		get fullName() {
+	    return this.fName + " " + this.lName;
+		},
+
+		set fullName(val) {
+	    var res = val.split(" ");
+	    if (res[0]) {
+	      this.fName = res[0];
+			}
+	    if (res[1]) {
+	      this.lName = res[1];
+			}
+		}
+
+	}
+
+	console.log("user12 через метод =", user12.printUserName() )
+
+  user12.fullName = "Иван Семеныч";
+
+	console.log("user12 через гетер =", user12.fullName )
+
+	Object.defineProperty(user12, "email", {
+	  value: 'asd@mail.ru',
+	  writable: false,
+		enumerable: true,
+		configurable: true,
+	});
+
+	console.log(Object.keys(user12));
+
+	function SuperUser(fname, lname) {
+	  this.fName = fname;
+	  this.lName = lname;
+
+	}
+
+	var user13 = new SuperUser("Семен", "Семеныч");
+	var user14 = new SuperUser("Иван", "Иваны");
+
+	console.log("Объект", user13, user14);
+	console.log("Объект.__proto__", user13.__proto__)
+	console.log("Объект.__proto__.constructor", user13.__proto__.constructor);
+	// console.log("Функция конструктор", SuperUser);
+
+	var Clara = { name: "Clara"};
+	var Alex = { name: "Alex" };
+
+  Clara.__proto__ = Alex; // отличное от базового core Object
+
+  console.log("Объект", Clara, Clara.name)
+
+	// Object() // обладает встроенным свойством prototype
+	// String()
+	// Number()
+
+  console.log("Object.prototype = ", Object.prototype) // получаем ссылку на корневой объект core Object
+  console.log("Object.prototype = ", Object.prototype.__proto__) // пытаемся у core Object посмотреть родителя/предка = null
+  Object.prototype; // это просто свойство prototype, которое автоматом создается у всех функций в JS
+
+
+	function Country(name, capital, population, square) {
+	  this.name = name
+	  this.population = population
+	  this.square = square
+	  this.capital = capital
+	}
+
+	Country.prototype["printInfo"] = function () {
+    return `Информация: ${ this.name }, ${this.capital}, ${this.population}, ${this.square}`;
+    // return "Информация: " + this.name + " " + this.capital + " " + this.population + " " + this.square;
+  }
+
+
+
+	var Russia = new Country("Россия", "Москва", 145000000, 100500);
+	var France = new Country("France", "Paris", 80000000, 10500);
+	var Germany = new Country("Germany", "Berlin", 7000000, 9500);
+
+	console.log(Russia.printInfo());
+	console.log(France.printInfo());
+	console.log(Germany.printInfo());
+
+
+	console.log("Прототип Clara", Object.getPrototypeOf(Clara));
+	console.log("является ли  Alex родителем Clara", Alex.isPrototypeOf(Clara));
+
+	// есть строка текста, нужно взять и сделать функцию, которая дублирует искомую строку N раз,
+	// при этом функция должна быть встроенным методом для всех строк.
+
+	var str55 = "Какой-то интересный текст!";
+	var str80 = "Other text";
+
+
+	String.prototype.duplicate = function (val) {
+	  // var res = this; // в этом примере this указывает на контекст исполнения, т.е. на строку текста - переменную str55
+	  var res = "";
+
+		while(val--) {
+      res += this;
+      // res = res + this;
+		}
+		return res;
+  }
+
+  console.log("str55.__proto__", str55.__proto__);
+  console.log("Результат", str55.duplicate(3));
+  console.log("Результат", str80.duplicate(2));
+
+  console.log("Результат", "Супер строка".duplicate(2));
+
+  // Какой-то интересный текст!Какой-то интересный текст!Какой-то интересный текст!
+
+	// дан массив, подсчитать кол-во положительных или отрицательных
+	Array.prototype.countSign = function (tp) {
+		var cnt = 0;
+	  this.forEach(function (item) {
+	    if (tp === "-" && item < 0) {
+        cnt ++;
+			} else {
+        cnt ++;
+			}
+		});
+
+	  return cnt;
+  }
+
+	// Array.prototype.countSign = function (ms, tp) {
+	// 	var cnt = 0;
+  //   ms.forEach(function (item) {
+	//     if (tp === "-" && item < 0) {
+  //       cnt ++;
+	// 		} else {
+  //       cnt ++;
+	// 		}
+	// 	});
+	//
+	//   return cnt;
+  // }
+
+  var ms10 = [-5, -6, -7, 4, -9, 0, 54, -3, 3];
+  console.log("Результат с массивом ", [-5, -6, -7, 4, -9, 0, 54, -3, 3, 8, -12, -15].countSign("-"));
+  console.log("Результат с массивом ", ms10.countSign("-"));
+
+
+
 </script>
 </body>
 </html>
