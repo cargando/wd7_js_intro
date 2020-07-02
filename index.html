@@ -952,6 +952,14 @@
 	  this.fName = fname;
 	  this.lName = lname;
 
+	  this.printInfoForSetTimeout = function (testA, testB) {
+			console.log("Тест для setTimeout: ", this.fName, this.lName)
+      console.log("this для setTimeout: ", this === window);
+			if (testA && testB) {
+        console.log("printInfoForSetTimeout получил параметры: ", testA, testB);
+			}
+		}
+
 	}
 
 	var user13 = new SuperUser("Семен", "Семеныч");
@@ -1062,6 +1070,190 @@
   console.log("Результат с массивом ", ms10.countSign("-"));
 
 
+  var h = "9"; // 0,1,2,3,4,5,6,7,8,9,A,B,Z
+  if (h >= "0" && h <= "9") {
+    console.log("number", h)
+	} else {
+    console.log("NOT number", h)
+	}
+
+  // A...Za...zА-Яа-я
+
+  // var h = "9"; // 0,1,2,3,4,5,6,7,8,9,A,B,Z
+  // if (str[i] >= "0" && str[i] <= "9") {
+  //   res += str[i]
+  // } else {
+  //   console.log("NOT number", h)
+  // }
+
+	// Отложенные операции или sleep
+	// setTimeout - планирование отложенного запуска функций
+
+	function printHello() {
+
+    console.log("Привет через 1.5 секунды, после окончания скрипта");
+	}
+
+	// var timerID = setTimeout(printHello, 1500 /* через запятую параметры для передачи в printHello */);
+
+  console.log("Привет от последней строчки нашего скрипта!");
+
+  user14.printInfoForSetTimeout();
+
+  // window.fName = "Это Имя Семеныча в объекте WINDOW";
+  var fName = "Это Имя Семеныча в объекте WINDOW";
+
+  /// setTimeout(user14.printInfoForSetTimeout, 1500 /* через запятую параметры для передачи в printHello */);
+  var delayMlSeconds = 1600;
+	var timerID = setTimeout(user14.printInfoForSetTimeout, delayMlSeconds, "Маргаритка", "Марс");
+
+	console.log("ID отложенной операции", timerID);
+
+	clearTimeout(timerID);
+
+
+	function printHellowInterval(str) {
+    console.log("print Hellow Interval:: hello", str);
+	}
+
+	// var intervalID = setInterval(printHellowInterval, delayMlSeconds, "Yo!!!");
+
+  // setTimeout(function (){ clearInterval(intervalID); }, delayMlSeconds * 10);
+
+  ///// РЕКУРСИЯ //////
+
+	function recursionExample(val) {
+		if (val >= 150) {
+			return 0;
+		}
+
+	  console.log("This is recursionExample:: ", val)
+
+		recursionExample(val + 1);
+
+  }
+
+  // recursionExample(1);
+
+	var c = 10;
+
+
+	function calcFactorialRecurs(num) {
+	  // !5 => 1 * 2 * 3 * 4 * 5
+		// !5 => 5 * 4 * 3 * 2 * 1
+		if (num === 1) { // проверка окончания подсчета факториала
+			return num;
+		}
+
+		if (num >= 10000) { // проверка окончания подсчета факториала
+			console.log("calcFactorialRecurs:: не умею считать такие большие числа", num);
+		  return num;
+		}
+
+    return num * calcFactorialRecurs(num - 1);
+	}
+
+	console.log("Факториал Рекурсия 15", calcFactorialRecurs(15));
+
+	function calcFactorialLoop(num) {
+		var res = 1;
+	  for(var i = 1; i <= num; i++) {
+      res *= i;
+		}
+
+	  return res;
+	}
+
+  console.log("Факториал Цикл 15", calcFactorialLoop(15));
+
+	var menu = [
+		{
+		  title: "Подержка",
+			url: '',
+			children: [
+        {
+          title: "О компании",
+          url: '',
+        },
+      ],
+		},
+		{
+		  title: "Акции",
+			url: '',
+			children: [],
+		},
+		{
+		  title: "Оплата",
+			url: '',
+			children: [],
+		},
+		{
+		  title: "Тарифы и услуги",
+			url: '',
+			children: [
+        {
+          title: "Тарифы",
+          url: '',
+          children: [
+            {
+              title: "Мобильная",
+              url: '',
+            },
+            {
+              title: "Объединяй",
+              url: '',
+            },
+            {
+              title: "Перейди в мегафон",
+              url: '',
+            },
+					],
+        },
+        {
+          title: "Интернет",
+          url: '',
+          children: [
+            {
+              title: "Для смартфона",
+              url: '',
+            },
+            {
+              title: "Для дачи",
+              url: '',
+            },
+            {
+              title: "Для роуминга",
+              url: '',
+            },
+					],
+        },
+        {
+          title: "Услуги/опции",
+          url: '',
+          children: [
+            {
+              title: "Безопасность",
+              url: '',
+            },
+            {
+              title: "Развлечение",
+              url: '',
+            },
+            {
+              title: "Полезное",
+              url: '',
+            },
+					],
+        },
+        {
+          title: "Роуминг",
+          url: '',
+          children: [],
+        },
+
+      ],
+		},
+	];
 
 </script>
 </body>
