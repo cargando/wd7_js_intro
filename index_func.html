@@ -264,6 +264,64 @@
 
   console.log(user, user2);
 
+
+
+
+
+  function prepareRND(min, max) {
+    var ms = [];
+    var minMaxObj = countArrLength();
+    var cnt = 1000;
+
+    console.log("prepareRND: min/max ", min, max, ", len = ", minMaxObj);
+
+    function sortNumber(a, b) {
+      return a - b;
+    }
+
+    function randomVal(min, max) {
+      return Math.floor(min + Math.random() * (max + 1 - min))
+    }
+
+    function countArrLength() {
+      var localMs = [min, max];
+      localMs = localMs.sort(sortNumber);
+      if (localMs[0] < 0 && localMs[1] >= 0 ) {
+        var r = Math.abs(localMs[0]) + localMs[1];
+        console.log("countArrLength: 1 ", r, localMs);
+
+      } else if (localMs[0] > 0 && localMs[1] >= 0 ) {
+        var r = localMs[1] - localMs[0];
+        console.log("countArrLength: 2 ", r, localMs);
+
+      } else { // else if (ms[0] < 0 && ms[1] < 0 ) {
+        var r = Math.abs(localMs[0]) - Math.abs(localMs[1]);
+        console.log("countArrLength: 3 ", r, localMs);
+      }
+      return {
+        len: r + 1,
+        min: localMs[0],
+        max: localMs[1],
+      }
+    }
+
+    return function rdn() {
+      var res = randomVal(minMaxObj.min, minMaxObj.max);
+
+      if (ms.includes(res) && ms.length < minMaxObj.len) {
+        console.log("RND: ", res, " already exist [ going deeper ]");
+        return rdn();
+      }
+      if (ms.length < minMaxObj.len) {
+        console.log("RND: added new val to Arr ", res);
+        ms.push(res);
+      }
+      ms = ms.sort(sortNumber);
+      console.log("Array = ", ms[ ms.indexOf(res) ], ms);
+      return ms[ ms.indexOf(res) ];
+    }
+  }
+
 </script>
 </body>
 </html>
