@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Classes</title>
+</head>
+<body>
+
+<h1>JavaScript Classes</h1>
+
+
+<script>
+
+	//// создание объекта через функцию-конструтор-шаблон
+	function UserInfo(fname, lname, phone, age, address) {
+	  this.fname = fname;
+		this.lname = lname;
+		this.phone = phone;
+		this.age = age;
+		this.address = address;
+
+  }
+
+  UserInfo.acceptedInfo = function () {
+	  console.log('UserInfo:: Constructor Accepted data: fname, lname, phone, age, address');
+	}
+
+	UserInfo.contextAccessHelper = function () {
+    console.log('UserInfo:: contextAccessHelper', this.fname, this.lname);
+	}
+
+
+  UserInfo.prototype.printUserInfo = function () {
+	  console.log("Имя: ", this.fname + " " + this.lname, " возраст", this.age);
+	  console.log("Address: ", this.address);
+    console.log("this.__proto__ ", this.__proto__.constructor.acceptedInfo());
+
+	}
+
+	var user1 = new UserInfo('Семен', 'Семеныч', '555-12-12', 30, 'г.Москва, ул.Петрово-Разумовская 100500')
+	var user2 = new UserInfo('Иван', 'Петрович', '555-12-12', 31, 'г.Москва, ул.Петрово-Разумовская 100')
+
+
+	////// все тоже самое только через классы
+
+	class UserInfoCls {
+
+	  constructor(fname, lname, phone, age, address) {
+      this.fname = fname;
+      this.lname = lname;
+      this.phone = phone;
+      this.age = age;
+      this.address = address;
+    }
+
+    printUserInfo() {
+      console.log("Имя: ", this.fname + " " + this.lname, " возраст", this.age);
+      console.log("Address: ", this.address);
+    }
+
+    get name() {
+	    return this.fname + " " + this.lname;
+		}
+
+		set name(val) {
+	    var res = val.split(' ');
+	    this.fname = res[0];
+	    this.lname = res[1];
+		}
+	}
+
+	var userCls1 = new UserInfoCls('Марта', 'Ивановна', '555-12-12', 30, 'г.Москва, ул.Петрово-Разумовская 100500');
+
+	console.log("Классовый объект", userCls1.fname)
+	userCls1.printUserInfo();
+
+	var fn1 = function () {
+	  //....
+	}
+
+	var SuperUser = class {
+
+	}
+
+	console.log("Тип fn1 = ", typeof fn1);
+	console.log("Тип SuperUser = ", typeof SuperUser);
+
+ 	userCls1.name = 'Umberto Rodrigues';
+	console.log("SuperUser геттер = ", userCls1.name);
+
+  UserInfo(); // обычную функцию конструктор можно использовать без оператора new
+	//   UserInfoCls(); без оператора new нельзя вызывать класс, как буд-то это просто функция
+
+	// НАСЛЕДОВАНИЕ В КЛАССАХ
+
+
+	class Animal {
+	  constructor(weight, height, legs) {
+      this.weight = weight;
+      this.height = height;
+      this.legs = legs;
+    }
+
+    printInfo() {
+	    console.log('Вес', this.weight, ' Рост', this.height, 'Кол-во ног', this.legs)
+		}
+	}
+
+
+	class Dog extends Animal {// аналогия когда мы использовали свойство __proto__
+ 		static AcceptedInfo() {
+      console.log('Dog:: Constructor Accepted data: weight, height, legs, speed');
+		}
+
+	  constructor( ...args ) { // все параметры будут собраны в виде массива с именем args,
+ 		  // т.е. из вот этого (weight, height, legs) получается массив [weight, height, legs, speed]
+      super(...args); // раскладывает из массива args в список переменных через запятую => (weight, height, legs, speed)
+      this.speed = args[3];
+    }
+
+    sayGavGav() {
+			console.log('I\'m doggy, gav-gav-gav!!!');
+		}
+
+    printInfo() {
+      this.sayGavGav();
+      super.printInfo();
+    }
+	}
+
+	class Perrot extends Animal {
+	  constructor(weight, height, legs, speedByLegs, speedByFligh) {
+      super(weight, height, legs);
+      this.speedByLegs = speedByLegs;
+      this.speedByFligh = speedByFligh;
+    }
+
+    sayChirik() {
+      console.log('I\'m perrot, chirick-chirick!!!');
+    }
+
+    printInfo() {
+      this.sayChirik();
+      super.printInfo();
+    }
+	}
+
+
+  var dog1 = new Dog("10kg", '50cm', 4, '8km/h');
+
+	var perrot1 = new Perrot("100g", '10cm', 2, '0.01km/h', '10km/h');
+
+	console.log(dog1, perrot1);
+
+  dog1.printInfo(); // экземпляр
+
+  Dog.AcceptedInfo(); // это шаблон или описание класса
+
+  perrot1.printInfo();
+
+
+
+  UserInfo.acceptedInfo();
+
+  user1.printUserInfo();
+
+  UserInfo.contextAccessHelper.call(user1);
+
+</script>
+</body>
+</html>

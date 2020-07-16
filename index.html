@@ -114,10 +114,153 @@
 		// var s = [1, -1, -2, 2, 3, 0, -3, 3, 4, 5].sort(sortNumber);
 		// console.log("отсортированный ", s)
 
-    document.getElementById("myButton4").addEventListener('click', prepareRND(-1, 4))
-    document.getElementById("myButton6").addEventListener('click', prepareRND(5, 10))
+    // document.getElementById("myButton4").addEventListener('click', prepareRND(-1, 4))
+    // document.getElementById("myButton6").addEventListener('click', prepareRND(5, 10))
 
-		
+    var Button1 = document.getElementById("myButton1")
+
+    /* Button1.onclick = handleButton1CounterClick(); - а с тобой мы разберемся сильно позже */
+
+    function handleButton1CounterClick () {
+      var cnt = 0
+      return function () {
+        cnt++
+        return this.value = "Number of Button 1 clicks - " + cnt
+      }
+    }
+
+    console.log("Привет #1");
+    setTimeout(function () {console.log("Привет #2");}, 2000);
+    console.log("Привет #3");
+
+		// Object -> { } => Object.create();
+
+		var obj10 = {
+		  "true": "что-то там",
+		}
+
+		var obj11 = {
+		  "true": "что-то там",
+		}
+
+		console.log("obj10", obj10);
+
+		// Map, Set - это те же самые Object, но с расширенными возможностями
+
+		var map1 = new Map();
+
+    map1.set(/* ключ */ 'test1',  /* значение */ 'this is val for test1 key');
+    map1.set(/* ключ */ obj10,  /* значение */ 'this is val for obj10 key');
+    map1.set(/* ключ */ obj11,  /* значение */ 'this is val for obj11 key');
+    map1.some = '12323'
+    map1.set(/* ключ */ 'test1',  /* значение */ 'this another val');
+
+    var ob15 = {
+      [obj10]: 'значение obj10',
+      [obj11]: 'значение obj11',
+		}
+    console.log("Map res = ", map1.get(obj10), map1.get(obj11));
+
+    console.log("Map res = ", ob15);
+
+    var map2 = new Map([
+      ['firstKey', 100500],
+      [obj10, 'this is for obj10'],
+      [true, 'this is for TRUE'],
+		]);
+
+    console.log("Map res = ", map2.entries());
+    map2.delete(obj10);
+
+    // Set
+
+    var set1 = new Set();
+
+    set1.add( /* значение */ 'this is val for test1 key');
+    set1.add( /* значение */ 'this is val for obj10 key');
+    set1.add( /* значение */ 'this is val for obj11 key');
+    set1.add( /* значение */ 'Numero duo');
+    set1.add( /* значение */ 'Numero duo');
+    set1.add( /* значение */ 'Numero duo');
+
+    console.log("Set res = ", set1.entries());
+
+    var msWithDuplicity = [1, 2, 3, 4, 4, 4, 4];
+
+    var ms100 = [ ...new Set(msWithDuplicity)];
+
+    console.log("Set res2 = ", ms100);
+
+
+    // ПЕРЕБИРАЕМЫЕ ОБЪЕКТЫ
+
+		var iterator10 = {
+		  minTemp: 20, // 21,22,23 - 25, 30, 35
+		  maxTemp: 60,
+		}
+
+		// Symbol() / String() / Number
+    // Symbol.iterator - это специально определенное свойство внутри Symbol
+
+    iterator10[ Symbol.iterator ] = function () { // это специальная функция подготовки к перебору
+
+		  return { // эта функция должна возвращать специальный объект следующей формы
+		  	  current: this.minTemp, // текущее значение перебора (по умолчанию равно нижней границе итерируемого объекта)
+					last: this.maxTemp, // верхний предел итерируемого объекта
+					next: function () { // метод перебора, т.е. функция которая выполняет обход итерируемого объекта
+
+		  	    function getMyNexVal(linkToThis) {
+              var retVal = linkToThis.current;
+              linkToThis.current += 5;
+
+              return retVal + ' гадусов';
+						}
+
+		  	    if (this.current <= this.last) { // проверяет закончился обход или нет
+              // если не закончился, тогда возвращаем объект у которого done = false и текущее значение
+
+							return {
+							  done: false,
+								value: getMyNexVal(this)
+							}; // { done: false, value: this.current++ }
+
+						} else { // в противном случае возвращаем объект где поле done = true
+							return { done: true };
+							// поле done - это индикатор, определяет возможность дальше обходить итерируемый объект
+						}
+					}
+			};
+		}
+
+		var i = 0;
+		for (var val of iterator10) {
+		  console.log('Current val', val, ', шаг = ', i++ );
+		}
+
+		console.log("array from iterator10 = ", iterator10, Array.from(iterator10));
+
+
+    // for ( of ) // это цикл для обхода итерируемых объектов (коллекции в html === итерируемый объект)
+
+		// for ( in ) // предназначен для обхода объекта и получения свойств объектов
+
+		var myStr = 'просто строка текста';
+
+    for (var val of myStr) {
+      console.log('Current val', val, ', from string ');
+    }
+
+    var user13 = {
+      name: 'Петрович',
+			age: 30,
+			phone: '555-12-12',
+		}
+
+    for (var property in user13) {
+      console.log('Current val FOR IN: ', property, user13[ property ] );
+		}
+
+
 
 
 	</script>
