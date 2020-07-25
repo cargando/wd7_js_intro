@@ -58,11 +58,11 @@
       console.log("Address: ", this.address);
     }
 
-    get name() {
+    get name() { // геттер
 	    return this.fname + " " + this.lname;
 		}
 
-		set name(val) {
+		set name(val) { // сеттер
 	    var res = val.split(' ');
 	    this.fname = res[0];
 	    this.lname = res[1];
@@ -85,8 +85,8 @@
 	console.log("Тип fn1 = ", typeof fn1);
 	console.log("Тип SuperUser = ", typeof SuperUser);
 
- 	userCls1.name = 'Umberto Rodrigues';
-	console.log("SuperUser геттер = ", userCls1.name);
+ 	userCls1.name = 'Umberto Rodrigues'; // установить значения для полей fname и lname через сеттер name
+	console.log("SuperUser геттер = ", userCls1.name); // считать значение из геттера name (склеивает поля fname и lname)
 
   UserInfo(); // обычную функцию конструктор можно использовать без оператора new
 	//   UserInfoCls(); без оператора new нельзя вызывать класс, как буд-то это просто функция
@@ -128,7 +128,7 @@
     }
 	}
 
-	class Perrot extends Animal {
+	class Parrot extends Animal {
 	  constructor(weight, height, legs, speedByLegs, speedByFligh) {
       super(weight, height, legs);
       this.speedByLegs = speedByLegs;
@@ -136,7 +136,7 @@
     }
 
     sayChirik() {
-      console.log('I\'m perrot, chirick-chirick!!!');
+      console.log('I\'m parrot, chirick-chirick!!!');
     }
 
     printInfo() {
@@ -148,7 +148,7 @@
 
   var dog1 = new Dog("10kg", '50cm', 4, '8km/h');
 
-	var perrot1 = new Perrot("100g", '10cm', 2, '0.01km/h', '10km/h');
+	var perrot1 = new Parrot("100g", '10cm', 2, '0.01km/h', '10km/h');
 
 	console.log(dog1, perrot1);
 

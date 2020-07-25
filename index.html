@@ -41,10 +41,26 @@
 	<button id="myButton6">click me 666</button>
 	<br><br>
 
+	<button id="myButtonW">click me window</button>
+	<br><br>
+
 
 	<script src="/js/events.js"></script>
 
 	<script>
+
+		document.getElementById('myButtonW').addEventListener('click', openWin);
+
+		function openWin() {
+		  var w = window.open('/index_class.html');
+
+		  w.superUser = Object.assign({status: "IMPORTED FROM PARENT"}, user13);
+		  w.superFetch = runConsole;
+		}
+
+		function runConsole(msg) {
+		  console.log("This is like from children: ", msg);
+		}
 
 		function prepareRND(min, max) {
 		  var ms = [];

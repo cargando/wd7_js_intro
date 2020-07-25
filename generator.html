@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Generator</title>
+</head>
+<body>
+
+<h1>Тип Данных Symbol и функции-генераторы</h1>
+
+
+
+
+<script>
+  // Новый тип данных Symbol
+	// Symbol.iterator - глобальная уникальная метка, для создания функция обходчиков итерируемых объектов
+	// Symbol - функция-конструктор и по совместительству объект
+
+	var newSymbol = Symbol();
+
+	// String()
+
+	var str = new String();
+	var simpleStr = "";
+
+	console.log("String() = ", str, typeof str);
+	console.log("simpleStr = ", simpleStr, typeof simpleStr);
+
+  var newSymbol2 = Symbol('Метка для Семеныча');
+  var newSymbol3 = Symbol('Метка для Семеныча'); // метка для семеныча
+  newSymbol3 = Symbol('Метка для Альберта'); // метка для семеныча
+
+  console.log("newSymbol2 === newSymbol3", newSymbol2 === newSymbol3);
+
+  /// можно сделать свои глобальные уникальные метки, привязанные
+
+	var myGlobalSybmol1 = Symbol.for('Метка для Марты');
+	var myGlobalSybmol2 = Symbol.for('Метка для Марты');
+
+  console.log("myGlobalSybmol1 === myGlobalSybmol2", myGlobalSybmol1 === myGlobalSybmol2);
+
+
+  var SUPER_GLOBAL_OBJECT = {
+    // ......
+		userName: 'Петрович',
+	}
+
+	//. .....
+
+	var LOGS_FIELD = Symbol();
+
+	// var LOGS_FIELD_1 = "LOGS_FIELD_1";
+
+  // SUPER_GLOBAL_OBJECT[ LOGS_FIELD ] = [1,2,3,4]; // условно логи приложения (ваше части)
+
+	function myFunc1() { // работаю я
+    var LOGS_FIELD = "LOGS_FIELD";
+
+    SUPER_GLOBAL_OBJECT[ LOGS_FIELD ] = [1,2,3,4];
+
+	}
+
+	function myFunc2() { // работает другой член команды
+    var LOGS_FIELD = "LOGS_FIELD";
+
+    SUPER_GLOBAL_OBJECT[ LOGS_FIELD ] = [5,6,7,8];
+
+	}
+
+  myFunc1()
+  myFunc2()
+  console.log("Результат с константой строкой", SUPER_GLOBAL_OBJECT);
+
+
+  function myFunc3() { // работаю я
+    var LOGS_FIELD = Symbol('LOGS_FIELD');
+
+    SUPER_GLOBAL_OBJECT[ LOGS_FIELD ] = [1,2,3,4];
+
+  }
+
+  function myFunc4() { // работает другой член команды
+    var LOGS_FIELD = Symbol('LOGS_FIELD');
+
+    SUPER_GLOBAL_OBJECT[ LOGS_FIELD ] = [5,6,7,8];
+
+  }
+
+  myFunc3()
+  myFunc4()
+  console.log("Результат с символом", SUPER_GLOBAL_OBJECT);
+
+
+  //// ФУНКЦИИ ГЕНЕРАТОРЫ
+
+	function * myFirstGenerator() { // function* myFirstGenerator() || function *myFirstGenerator()
+	  var user = 'Семен Семеныч';
+    console.log('Шаг 1');
+
+		yield user;
+
+    console.log('Шаг 2');
+
+    yield user + ' пошел в магаз за хлебом';
+
+    console.log('Шаг 3');
+    return 555;
+
+    console.log('Шаг 4');
+	};
+
+	var mySecondGenerator = function * () {
+	  // ...
+	}
+
+	class MyClass {
+
+	  * myThirdGenerator() { // метод генератор внутри класса
+	    // .....
+		}
+	}
+
+	// yield - ключевое слово, аналогиченое return, возвращает значение из функции на каждом шаге выполнения функции-генератора
+	// другими словами - это инструкция обозначающая шаг в исполнении тела функции
+	// остановки исполнения тела функции и возврата результата из функции
+	// с возможностью дальнейшего возврата обратно в функцию и продолжения исполнения
+	// кода тела функции сразу после yield
+
+
+	var generatorResult = myFirstGenerator();
+
+	console.log("After first implementation generatorResult = ", generatorResult)
+
+	console.log("After second implementation ", generatorResult.next());
+	console.log("After third implementation ", generatorResult.next());
+	console.log("After forth implementation ", generatorResult.next());
+
+	/////
+  console.log('все тоже самое только через цикл фор-оф');
+
+  var cnt = 0;
+
+  var generatorResult2 = myFirstGenerator();
+  for (var v of generatorResult2) {
+    console.log("Step ", cnt, ' val = ', v);
+	}
+
+
+  // НОВЫЕ СТАНДАРТЫ JS - ECMAScript 5;
+
+	// const / let = var, но только почти
+	// const - объявляем константу, которую далее в коде нелзя менять
+	// let - объявляется переменная переменная
+
+  console.log("var a = ", a);
+	var a = 100;
+
+  // console.log("const b= ", b, c);
+	// const b = 100; // не работает hoisting
+	// let c = 100; // не работает hoisting
+
+	const c = 100;
+
+  // c++;// константу нельзя менять (нельзя присваивать ей другое значение)
+
+	const obj1 = {}; // f234ad83d7f3cc4 - > name
+  obj1.name = 'Семеныч';
+
+  // obj1 = {} /// нельзя
+
+	let v1 = 5; // точная аналогия var, за исключением всплытия, т.е. у лет нет всплытия
+	v1 = 'asasd';
+
+	// для const и let область видимости ВСЕГДА ограничена строго блоком кода, т.е. { ..... }
+
+	if (1) {
+	  var testVal = 50;
+	}
+
+	console.log("var testVal", testVal);
+
+	if (1) {
+	  const testVal2 = 50; // существует только в рамках блока кода - тела ИФа
+	  let testVal3 = 50;
+	} // это касается не только ИФ, это касается любого блока кода: for, while, if, else, switch, try / catch
+
+	// console.log("const testVal2", testVal2); // тут уже нету переменной testVal2
+
+
+	///////// ARROW FUNCTIONS / стрелочные функции
+
+	function fnName( /* параметры */) { // old style
+	  // тело функции
+	}
+
+	const myFirstArrowFunc = (/* параметры */) => { // у стрелочных функций нет псевдомассива arguments
+
+	  console.log("Привет из myFirstArrowFunc()!");
+	  // тело функции
+	}
+
+  myFirstArrowFunc();
+
+
+
+	const sumVal1 = val => { // если у стрелочной функии ВСЕГО ОДИН параметр, то можно опустить круглые скобки
+	  return val + 100;
+	}
+
+	const sumVal2 = (val, div) => { // если у стрелочной функии ВСЕГО ОДИН параметр, то можно опустить круглые скобки
+	  return (val + 100) / div;
+	}
+
+	const sumVal3 = val => val + 100; // стрелочная функция с одной инструкцией - можно убрать ретурн и фигурные скобки
+
+	const sumVal4 = val => console.log("Yo!!!", val); // стрелочная функция с одной инструкцией - можно убрать ретурн и фигурные скобки
+
+  sumVal4(); // стрелочные функциии НЕ ВСПЛЫВАЮТ!!!!!
+
+	const sumVal5 = a => b => c => a + b + c; // это аналог:
+
+	function sumValNormal (a) {
+	  return function (b) {
+	    return function (c) {
+	      return a + b + c;
+			}
+ 		}
+	}
+
+	const fn1 = a => b => b ? fn1(a + b) : a;
+
+	console.log("fn = ", fn1(5)('4')() );
+	// у стрелочной функции нельзя поменять контекст исполнения, т.е. THIS все время один и тот же и он
+	// равен тому, что было установлено в момент инициализации функции
+
+	const user1 = {
+	  name: 'Семеныч',
+		age: 35,
+	};
+
+	var userName = 'Глобальный Иван Иваныч'; // window.name
+	var userAge = 'Глобальный 35'; // window.age
+
+
+	// CONST и LET не являются детьми внутри WINDOW !!!
+
+	const user2 = {
+    userName: 'Иваныч',
+    userName: 20,
+		printInfo: () => {
+	    console.log("User = ", this.userName, this.userAge);
+		}
+	};
+
+	class SuperUser {
+	  constructor(a, b) {
+	    this.name = a;
+	    this.age = b;
+    }
+
+    printInfo = () => {
+    	console.log("SuperUser = ", this.name, this.age);
+  	}
+	}
+
+  user2.printInfo();
+
+	console.log("user2 = ", user2.printInfo())
+  const superUser1 = new SuperUser('Umberto', 30);
+  superUser1.printInfo();
+
+  superUser1.printInfo.call(user1);
+
+  ////// class = Классы
+
+	////// static methods inside classes
+
+	////// getter & setter
+
+	////// Default params = знаения по умолчанию в параметрах функции
+
+	const sum2 = (a, b = 5) => {
+		return a + b;
+	}
+
+	console.log("sum2 ", sum2(4));
+
+	/////// Template literals = Шаблонные литералы
+
+	const someString = `какая-то строчка текста`;
+
+	const someString2 = `какая-то\
+строчка текста`;
+
+  Array.from(someString2).forEach(v => console.log(String(v).charAt(0)));
+
+	const sss = 'sfsfs\n' +
+		'fsdf'
+
+  const vv = 100;
+	const someString3 = `какая-то строчка текста ${ vv }`; // операция интерполяции
+	console.log("someString = ", someString3)
+
+
+  const dd = 555;
+
+	const myString = test`текст 1 ${ vv } текст 2 ${ vv }`;
+	// аналог вызова функции по старинке
+
+  // test(["текст 1 ", "текст 2 ", ""], vv, dd)
+
+	function test(args1, args2) {
+	  console.log("Что получила test: ", arguments);
+	}
+
+	/////////// DESTRUCTION = Деструктуризация
+
+	const userInfo = {
+	  name: 'Семеныч',
+		age: 30,
+		address: 'г.Москва',
+		// phone - нету
+	}
+
+	// const name = userInfo.name; - по старому
+
+	const { name, phone = '555-12-12', hobby } = userInfo; // по новому
+
+	console.log("Переменная name = ", name, phone, hobby);
+
+	const fruits = ['banana', 'orange', 'kiwi', 'apple'];
+	// const [bbb, orange, kiwi, apple] = fruits; // деструктуризация массива
+	const [bbb, , , apple] = fruits; // деструктуризация массива, пропустили 2 элемента
+
+  console.log("Переменные из массива fruits ", bbb, apple);
+
+
+  // destructuring assignment = деструктурирующее присваивание
+
+	const cloudy = false;
+	const rainy = false;
+	const sunny = true;
+	const pressure = 749;
+	const wind = '12m/s';
+
+	const weather = { // новый вариант ленивого присваивания данных в объекте
+    cloudy, // если в коде уже есть переменная
+    rainy, // которая совпадает с именем поля в объекте
+    sunny, // тогда можно прибегнуть к укороченной операции инициализации поля в объекте
+    pressure, // т.е. вместо pressure: pressure, писать просто pressure (или др. название поля)
+    wind,
+	}
+
+  const weatherNotLazy = { // старый вариант присваивания
+    cloudy: cloudy,
+    rainy: rainy,
+    sunny: sunny,
+    pressure: pressure,
+    wind: wind,
+  }
+
+  var x, { x: y = 1 } = { x };
+
+	console.log("Y = ", y);
+
+
+	const user5 = {
+    name: "Семеныч",
+		age: 30,
+		address: 'Москва, ул.Петрово-Разумовская 100500',
+		phone: {
+      country: 7,
+			code: 495,
+			number: '555-12-12'
+		}
+	}
+
+	const someFunc = (data) => {
+	  const { name, age, address } = data;
+	  console.log("This is user: ", name, age, address)
+	};
+
+	const someFunc2 = ({ name, age, address }, someOtherInfo) => {
+	  console.log("This is user (inline destructing): ", name, age, address, someOtherInfo)
+	};
+
+  someFunc(user5);
+  someFunc2(user5, "Еще текст");
+
+  const someFunc3 = ({ name, age, address, phone: {country, code, number} }, someOtherInfo) => {
+    console.log("This is user (inline destructing): ", name, age, address, someOtherInfo)
+    console.log("inline destructing, phone: ", country, code, number);
+  };
+
+  someFunc3(user5, "Еще текст");
+
+
+  // свойство __proto__ - тоже результат очердного ECMASCRIPT
+  // class и super() - тоже результат очердного ECMASCRIPT
+
+	// динамический свойства объектов
+
+  const fieldName = 'first' + '_' + 'name';
+	const user6 = {
+	  ['first' + '_' + 'name']: 'Семен Семеныч', // аналог поля first_name
+	}
+
+
+  console.log("User6 info", user6.first_name, user6[fieldName]);
+
+
+	/// FOR OF - оператор-цикл для прохода по свойствам объекта - получает названия полей объекта
+	/// FOR IN - оператор-цикл для прохода по итерируемым объектам - получает значения из объекта
+
+  // Promisses - оставим на потом
+
+	// ES Modules Syntax
+
+	// export
+
+	// export const someFunc4 = () => null;
+	// export function someFunc5() { return  null; }
+	// export {
+  //   user5,
+  //   fieldName,
+  //   user6,
+	// }
+	//
+  // // import
+	//
+	// import { user5, someFunc4 } from 'js/intro1';
+
+	//// new STRING methods
+	const f = 'текст какой-то';
+
+	console.log("Строка 3 раза:", f.repeat(3))
+
+	// codePointAt
+
+	// Object
+	const ob1 = {
+	  user: "Семеныч"
+	}
+	const ob2 = {
+	  user: "Семеныч 3"
+	}
+
+	const ob3 = ob1;
+
+	console.log("Одинаковый объект", Object.is(ob1, ob3)) // ===
+
+	const age = { age: 30 };
+	const phone2 = { phone: {code: 45, number: '444-12-12'} };
+
+  Object.assign(ob1, age, phone2) // метод объединения двух или более объектов в 1
+
+	console.log("объект", ob1) // ===
+
+	const obRes = Object.assign({}, ob2, age, phone2) // аналогия { ...ob2, ...age, ...phone2}
+
+  phone2.phone.code = 495;
+  console.log("объект obRes", obRes, phone2) // ===
+
+	// Object.setPrototypeOf - аналогия __proto__
+
+
+	///// SPREAD & REST operators
+
+	const a1 = [1, 2, 3, 4, 5];
+  const b1 = [ ...a1, 6, 7, 8, 9 ]; // взял деструктурировал массив А и все его элементы вставил внутрь массива В
+  // const b1 = [ ...a1, 6, 7, 8, 9, ...a1 ]; // можно делать СПРЕД в любом месте и в любых количествах
+
+	const aCopy1 = a1.slice(); // копирование массива
+	const aCopy2 = [ ...a1 ]; // копирование массива - новый синтаксис
+
+	console.log("spread adday", b1, aCopy1)
+
+	const str1 = 'Привет!';
+	const strArr1 = str1.split(''); // из строки в массив символов
+	const strArr2 = [ ...str1 ]; // из строки в массив символов - новый синтаксис
+  console.log("spread string", strArr2);
+
+  const obUser1 = {
+    name: 'Marta',
+		age: 15,
+		hobby: ['ski', 'photo', 'walk around'],
+	}
+
+  const aditionalInfo = {
+    phone: '555-12-12',
+		address: 'Москва, Кастанаевская 100500',
+	}
+
+	 const userResult = { ...obUser1, ...aditionalInfo, name: 'Семеныч' }; // скопировать поля из указанных объектов
+  console.log("spread object", userResult);
+  console.log("spread object: old object", obUser1);
+
+  obUser1.hobby.splice(1,1);
+
+  function printSomeInfoOld() {
+    console.log('Все параметры printSomeInfoOld:', ...arguments);
+	}
+
+  const printSomeInfo1 = ( ...args ) => { // REST OPERATOR
+
+    const [first, , third] = args;
+
+    console.log('Все параметры printSomeInfo:', args[0], args[2]);
+    console.log('Все параметры printSomeInfo:', first, third);
+	}
+
+  const printSomeInfo2 = (name, ...args ) => {
+    console.log('Все параметры printSomeInfo:', name, ...args);
+  }
+
+
+  printSomeInfoOld('Антон', 30, '555-12-12', 'без адреса')
+  printSomeInfo1('Marta', 15, '444-12-12');
+  printSomeInfo2('Umberto', 15, '444-12-12');
+
+
+  // Set, Map
+	// function-generator
+
+	// Array.prototype.includes();
+
+	const fruits1 = ['banana', 'apple', 'kiwi']; // indexOf
+
+	if (fruits1.includes('apple')) { // нововведение
+	  console.log("Есть такой фрукт includes", 'apple')
+	}
+
+	if ( fruits1.indexOf('apple') !== -1 ) { // old
+	  console.log("Есть такой фрукт indexOf", 'apple')
+	}
+
+
+	/// возведение в степень через **
+
+	const aa = Math.pow(2, 3); // старый
+	const bb = 2 ** 3; // новый
+
+	const str10 = 'Some text'.padStart(10); // => '     Первая Строка текста'
+	const str11 = 'Вторая Строка текста';
+
+	//
+	console.log(str11.padStart(30))
+	console.log(str11.padEnd(30), "конец")
+
+	//// Object.values
+
+  console.log("obUser1", Object.values(obUser1) )
+  console.log("obUser1", Object.keys(obUser1) )
+  console.log("obUser1", Object.entries(obUser1) )
+
+	const fff = Object.values(obUser1)[1];
+	// const fff = Object.values(obUser1).filter(() => null /*...*/).map();
+
+	// Trailing coma
+
+	const superUser3 = {
+    name: 'Marta',
+    age: 15,
+    hobby: ['ski', 'photo', 'walk around'],
+		phone: {
+      code: 495,
+			number: '333-12-12',
+			misc: {
+        type: 'mobile'
+      }
+    }
+	};
+
+  const superUser4 = {
+    name: 'Marta',
+    age: 15,
+    hobby: ['ski', 'photo', 'walk around'],
+    phone: {
+      code: 495,
+      number: '333-12-12',
+    }
+  };
+
+	const superPrint = (
+	  a,
+		b,
+		c,
+		d,
+	) => null;
+
+	// Async/Await
+
+	const echoPoneGood = (ob) => { // old style
+    if (ob && ob.phone && ob.phone.misc && ob.phone.misc.type) {
+      console.log("Phone", ob.phone);
+    } else {
+      console.log("I got no Phone");
+		}
+
+	}
+
+	const echoPoneBad = (ob) => {
+    if (ob.phone.misc.type) {
+      console.log("Phone", ob.phone);
+    }
+	}
+
+  echoPoneGood(superUser3);
+
+  const echoPoneGoodNew = (ob) => { // old style
+    if (ob?.phone?.misc?.type) {
+      console.log("Phone", ob.phone);
+    } else {
+      console.log("I got no Phone");
+    }
+  }
+
+  echoPoneGoodNew(superUser4);
+
+
+  const resultN = superUser3?.phone?.misc?.type ?? 'нет данных'
+
+	// if (superUser4?.phone?.misc?.type) {
+  //   resultN = superUser4.phone.misc.type;
+	// } else {
+  //   resultN = 'нет данных';
+  // }
+
+	console.log('Data phone: ', resultN);
+
+
+  //
+	const s1 = "двойные кавычки"; // олд скульный вариант 1
+	const s2 = 'одинарные кавычки'; // олд скульный вариант 2
+
+	const s3 = `через тильду (template literals)`; // новый враиант объявить строку - ES2015
+
+  const getS1 = () => s1;
+
+	// старый вариант объединения строк
+	const resStr1 = s1 + " добавить кусок текста " + ';;;;'; // -> переменная с текстом, объединенная строка
+
+	// новый вариант объединения строк
+	const resStr2 = `${ true ? "11" : "3222" } добавить кусок текста ;;;;;`; // -> переменная с текстом, объединенная строка
+	// аналогий => s1 + "...."
+
+
+</script>
+</body>
+</html>
